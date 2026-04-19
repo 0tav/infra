@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: Dev
+      POSTGRES_PASSWORD: Dev123
+      POSTGRES_DB: dbBelajar
+    ports:
+      - "5432:5432"
+
+  cache:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  broker:
+    image: apache/kafka:latest
+    ports:
+      - "9092:9092"
