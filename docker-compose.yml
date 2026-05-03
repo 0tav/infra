@@ -8,6 +8,8 @@ services:
       POSTGRES_DB: dbBelajar
     ports:
       - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql  # <--- to save database on my pc, so even if docker down by mistake it still safe
 
   cache:
     image: redis:latest

@@ -1,3 +1,29 @@
 node_modules/
 .env
 dist/
+/generated/prisma
+
+# Testing & Coverage
+coverage/
+.vitest-session.json
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS Files (Opsional tapi bagus untuk kerapihan)
+.DS_Store
+
+# Visual Studio files (slnx, vsuo, layout)
+.vs/
+*.slnx.sqlite
+*.vsuo
+*.json.user
+*.json.user.json
+documentlayout.json
+
+# Docker & Local Database data
+postgres_data/
+pgdata/
