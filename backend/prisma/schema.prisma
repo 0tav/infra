@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model t_learnskill {
+  id          Int         @id @default(autoincrement())
+  skillname   String?     @db.VarChar(100)
+  description String?
+  enddate     DateTime?   @db.Date
+  isfinish    Boolean?    @default(false)
+  deleteat    DateTime?
+
+  metadata    Json?
+  
+  // Adding Foreign Key
+  categoryId  Int?        
+  category    t_category? @relation(fields: [categoryId], references: [id])
+}
+
+model t_category {
+  id          Int            @id @default(autoincrement())
+  name        String         @unique
+  skills      t_learnskill[] // Satu kategori bisa punya banyak skill
+  deleteat    DateTime?
+}
