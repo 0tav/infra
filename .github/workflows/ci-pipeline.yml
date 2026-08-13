@@ -1,0 +1,42 @@
+name: DevOps Architect Core CI Pipeline
+
+on:
+  push:
+    branches: [ main, master, development ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  audit-and-test:
+    name: Enterprise Verification (Prisma & TypeScript)
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: "postgresql://rand:random@localhost:5432/mydb?schema=public"
+
+    steps:
+      - name: Checkout Code Blueprint
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm Environment
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10.33.0
+
+      - name: Setup Node.js Core with pnpm Cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Monorepo Dependecies
+        run: pnpm install --frozen-lockfile
+
+      - name: Automated Prisma Verification
+        run: pnpm --filter backend exec prisma validate
+      
+      - name: Automated TypeScript Compilation Verification
+        run: pnpm --filter backend exec tsc --noEmit && pnpm --filter frontend exec tsc --noEmit
+
+      - name: Execute Resilient Backend Unit Test
+        run: pnpm --filter backend test --if-present

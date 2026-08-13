@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Category } from '@/types'; 
+import { fetchAPI } from '@/lib/api';
 
 export default function AddSkillPage() {
   const router = useRouter();
@@ -16,8 +17,7 @@ export default function AddSkillPage() {
   });
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/skills`) 
-      .then((res) => res.json())
+    fetchAPI('/api/skills')
       .then((resData) => {
         setCategories(resData?.data || []);
       })
@@ -55,18 +55,14 @@ export default function AddSkillPage() {
               ]
             };
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/skills`, {
+            await fetchAPI('/api/skills', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(payload), // Mengirimkan payload nested JSON
+              body: JSON.stringify(payload),
             });
 
-            if (response.ok) {
-              router.push('/'); 
-              router.refresh(); 
-            } else {
-              alert('Failed to post data.');
-            }
+            router.push('/'); 
+            router.refresh();
+            
           } catch (error) {
             console.error('Network error:', error);
             alert('Failed to connect to server.');

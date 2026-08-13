@@ -17,7 +17,7 @@ pnpm-debug.log*
 .DS_Store
 
 # Visual Studio files (slnx, vsuo, layout)
-.vs/
+**/.vs/
 *.slnx.sqlite
 *.vsuo
 *.json.user
@@ -30,3 +30,9 @@ pgdata/
 
 #HTTP
 *.http
+test_api.http
+
+# Tsx & Node runtime cache
+.ts-node/
+tsconfig.tsbuildinfo
+

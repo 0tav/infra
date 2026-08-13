@@ -6,8 +6,8 @@
     },
 
     // File Layout
-    // "rootDir": "./src",
-    // "outDir": "./dist",
+    "rootDir": "./src",
+    "outDir": "./dist",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
@@ -44,5 +44,15 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+  },
+
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "__test__",
+    "vitest.config.ts",
+    "prisma.config.ts",
+    "index.ts"
+  ]
 }

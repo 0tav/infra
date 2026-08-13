@@ -30,7 +30,14 @@ const swaggerOptions: swaggerJSDoc.Options = {
             }
         ]
     },
-    apis: ["./src/server.ts", "./src/services/*.ts"],
+    apis: [
+        "./src/server.{ts,js}", 
+        "./src/services/*.{ts,js}",
+        "./dist/server.{ts,js}", 
+        "./dist/services/*.{ts,js}",
+        "./server.{ts,js}",
+        "./services/*.{ts,js}"
+    ],
 }
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
@@ -101,11 +108,34 @@ app.use(globalErrorHandler);
 
 async function bootstrap() {
     try {
+        const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
         console.log("[SYSTEM] Connecting to Kafka Broker in Docker...");
         await connectKafka();
         
+        const maxRetries = 5;
+        const retryDelayMs = 2000;
+        let consumerActivated = false;
+
         console.log("[SYSTEM] Activating Background Consumer Worker...");
-        await runSkillConsumer();
+        for(let attempt = 1; attempt <= maxRetries; attempt++){
+            try {
+                await runSkillConsumer();
+                consumerActivated = true;
+                console.log("[KAFKA] Consumer successfully locked onto topic partition!");
+                break;
+            } catch (consumerERR: any) {
+                console.warn(`[KAFKA] [Attempt ${attempt}/${maxRetries}] Partition or cluster metadata not ready yet.`);
+                console.warn(`Reason: ${consumerERR.message || consumerERR}`);
+                
+                if (attempt === maxRetries) {
+                    throw new Error("Kafka cluster metadata failed to stabilize after maximum retries.");
+                }
+                
+                console.log(`Waiting ${retryDelayMs / 1000} seconds before next attempt...`);
+                await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
+            }
+        }
 
         // Setelah infrastruktur siap, baru nyalakan server Express untuk menerima traffic HTTP
         app.listen(port, () => {

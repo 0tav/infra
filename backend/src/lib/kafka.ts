@@ -2,7 +2,7 @@ import { Kafka } from "kafkajs";
 
 const kafka = new Kafka({
     clientId: 'prep-app',
-    brokers: ['localhost:9092']
+    brokers: process.env.KAFKA_BOOTSTRAP_SERVER ? [process.env.KAFKA_BOOTSTRAP_SERVER] : ['localhost:9092'],
 });
 
 export const producer = kafka.producer();
@@ -20,7 +20,7 @@ export async function connectKafka() {
 
         const existingTopics = await admin.listTopics();
 
-        if (!existingTopics.includes(TOPIC_NAME)) {
+        if (!existingTopics.includes(TOPIC_NAME)) {            
             console.log(`[KAFKA] Topic ${TOPIC_NAME} not exists. Create a new topic...`);
 
             await admin.createTopics({

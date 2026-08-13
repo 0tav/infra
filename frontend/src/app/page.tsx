@@ -1,15 +1,10 @@
 import { CategoryWithSkills } from '@/types';
 import Link from 'next/link';
+import { fetchAPI } from '@/lib/api';
 
 async function getCategoryWithSkills(){
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/skills`, { 
-      cache: 'no-store'
-    });
-    
-    if (!res.ok) throw new Error('Failed to fetch data from server');
-
-    const responseData = await res.json();
+    const responseData = await fetchAPI('/api/skills');
 
     return responseData?.data || [];
   } catch (error) {
