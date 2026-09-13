@@ -10,7 +10,8 @@ import { globalErrorHandler } from "./middlewares/errorMiddleware.js";
 import cors from "cors";
 
 const app = express();
-const port = 3000;
+// const port = 3000;
+const port = 10000;
 
 app.use(express.json());
 app.use(cors());
@@ -138,7 +139,7 @@ async function bootstrap() {
         }
 
         // Setelah infrastruktur siap, baru nyalakan server Express untuk menerima traffic HTTP
-        app.listen(port, () => {
+        app.listen(port,'0.0.0.0', () => {
             console.log(`[SERVER] Successfully run at http://localhost:${port}`);
             console.log(`Swagger API Docs  : http://localhost:${port}/api-docs`);
             console.log(`GET  Data  : http://localhost:${port}/api/skills`);
