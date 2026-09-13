@@ -1,37 +1,32 @@
-# Base Image Linux Ringan dengan OpenSSL bawaan untuk Prisma
 FROM node:20-alpine
 RUN apk add --no-cache openssl libc6-compat dos2unix
 
-# Aktifkan corepack untuk pnpm bersih versi Linux Cloud
-ENV COREPACK_ENABLE=1
-RUN npm i -g pnpm
-
 WORKDIR /app
 
-# 1. Hanya salin file package untuk menjaga cache instalasi
-COPY package.json pnpm-lock.yaml* ./
+RUN npm i -g pnpm
 
-# 2. Salin folder prisma sebelum install agar client terikat dengan benar
+COPY package.json pnpm-lock.yaml* ./
+RUN sed -i '/"packageManager":/d' package.json
+
 COPY prisma ./prisma/
 
-# 3. Instal dependency TANPA flag hoisted (Hemat RAM 70% & Hindari Error Biner)
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
-# 4. Salin seluruh sisa file kode backend
 COPY . .
 
-# 5. Generate Prisma Client versi Linux Cloud
+RUN sed -i '/"packageManager":/d' package.json
+
+ARG DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
+
 RUN pnpm prisma generate
 
-# 6. Build TypeScript menjadi JavaScript
 RUN pnpm build
 
-# 7. Konfigurasi Port dan Environment
 EXPOSE 10000
 ENV PORT=10000
 ENV NODE_ENV=production
 
-# 8. Jalankan entrypoint Anda
 COPY entrypoint.sh ./entrypoint.sh
 RUN dos2unix ./entrypoint.sh && chmod +x ./entrypoint.sh
 
