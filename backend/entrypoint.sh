@@ -12,7 +12,8 @@ set -e
 DB_HOST="postgres_db"
 DB_PORT="5432"
 
-echo "[ENTRYPOINT] Waiting PostgreSQL at ${DB_HOST}:${DB_PORT} ready to connect"
+echo "[ENTRYPOINT] Waiting PostgreSQL at ${DB_HOSgit update-index --chmod=+x backend/entrypoint.sh
+T}:${DB_PORT} ready to connect"
 
 until nc -z -w 2 "$DB_HOST" "$DB_PORT"; do
     echo "[ENTRYPOINT] Database not ready yet. Try again after 2 seconds"
