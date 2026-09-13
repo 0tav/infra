@@ -1,0 +1,12 @@
+{
+  "$schema": "https://railway.app",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "pnpm install --filter backend... && pnpm --filter backend prisma generate && pnpm --filter backend build"
+  },
+  "deploy": {
+    "startCommand": "pnpm --filter backend start",
+    "healthcheckPath": "/health",
+    "restartPolicyType": "ON_FAILURE"
+  }
+}
