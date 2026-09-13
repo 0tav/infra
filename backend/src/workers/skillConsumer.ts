@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/dbConn.js";
 import { consumer } from "@/lib/kafka.js";
 
-const KAFKA_TOPIC = "learning-service.skills";
+const KAFKA_TOPIC = "learning-services.skills";
 
 export async function runSkillConsumer(){
     await consumer.subscribe({ topic: KAFKA_TOPIC, fromBeginning: true });

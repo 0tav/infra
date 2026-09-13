@@ -1,5 +1,26 @@
 postgres_data/
 node_modules/
+pgdata/
 
 .env
 .env.local
+.env.production
+.env.*
+*.env
+
+dist/
+.next/
+
+.DS_Store
+**/.vs/
+*.slnx.sqlite
+*.vsuo
+*.json.user
+*.json.user.json
+documentlayout.json
+
+**backend/docker/base/
+**backend/docker/global/
+**backend/docker/pg_*
+**backend/docker/postmaster.*
+**backend/docker/PG_VERSION

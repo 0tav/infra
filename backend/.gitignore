@@ -1,7 +1,10 @@
 node_modules/
-.env
 dist/
 /generated/prisma
+node_modules/.prisma
+
+.env
+.env.*
 
 # Testing & Coverage
 coverage/
@@ -12,6 +15,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+*-debug.log*
+*-error.log*
 
 # OS Files (Opsional tapi bagus untuk kerapihan)
 .DS_Store
@@ -27,6 +32,10 @@ documentlayout.json
 # Docker & Local Database data
 postgres_data/
 pgdata/
+/docker/base/
+/docker/pg_*
+/docker/postmaster.*
+/docker/PG_VERSION
 
 #HTTP
 *.http

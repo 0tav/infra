@@ -1,6 +1,6 @@
+import "dotenv/config";
 import express, { type NextFunction, type Request, type Response } from "express";
 import { Client } from "pg";
-import "dotenv/config";
 import { createCategory, getHardSkills } from "./services/categoryServices.js";
 import { connectKafka } from "./lib/kafka.js";
 import { runSkillConsumer } from "./workers/skillConsumer.js";
@@ -113,7 +113,7 @@ async function bootstrap() {
         console.log("[SYSTEM] Connecting to Kafka Broker in Docker...");
         await connectKafka();
         
-        const maxRetries = 5;
+        const maxRetries = 15;
         const retryDelayMs = 2000;
         let consumerActivated = false;
 
